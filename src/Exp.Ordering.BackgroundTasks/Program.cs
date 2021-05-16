@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exp.Order.BackgroundTasks
+namespace Exp.Ordering.BackgroundTasks
 {
     class Program
     {

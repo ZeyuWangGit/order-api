@@ -1,6 +1,6 @@
-﻿using Exp.Order.Domain.Abstraction;
+﻿using Exp.Ordering.Domain.Abstraction;
 
-namespace Exp.Order.Domain
+namespace Exp.Ordering.Domain.OrderAggregate
 {
     public class Order : Entity<long>, IAggregateRoot
     {

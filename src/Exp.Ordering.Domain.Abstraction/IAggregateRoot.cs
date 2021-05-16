@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Exp.Order.Domain.Abstraction
+﻿namespace Exp.Ordering.Domain.Abstraction
 {
     public interface IAggregateRoot
     {

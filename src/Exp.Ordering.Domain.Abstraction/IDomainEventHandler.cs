@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Exp.Order.Domain.Abstraction
+namespace Exp.Ordering.Domain.Abstraction
 {
     public interface IDomainEventHandler<TDomainEvent> : INotificationHandler<TDomainEvent>
         where TDomainEvent : IDomainEvent

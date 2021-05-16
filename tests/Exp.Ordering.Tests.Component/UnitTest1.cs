@@ -1,7 +1,6 @@
-using System;
 using Xunit;
 
-namespace Exp.Order.Tests.Component
+namespace Exp.Ordering.Tests.Component
 {
     public class UnitTest1
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Exp.Order.Infrastructure
+﻿namespace Exp.Ordering.Infrastructure
 {
     public class Class1
     {

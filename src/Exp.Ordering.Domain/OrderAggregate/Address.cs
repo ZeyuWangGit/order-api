@@ -1,7 +1,7 @@
-﻿using Exp.Order.Domain.Abstraction;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Exp.Ordering.Domain.Abstraction;
 
-namespace Exp.Order.Domain
+namespace Exp.Ordering.Domain.OrderAggregate
 {
     public class Address : ValueObject
     {

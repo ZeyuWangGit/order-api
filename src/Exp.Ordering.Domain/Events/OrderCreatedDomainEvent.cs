@@ -1,6 +1,7 @@
-﻿using Exp.Order.Domain.Abstraction;
+﻿using Exp.Ordering.Domain.Abstraction;
+using Exp.Ordering.Domain.OrderAggregate;
 
-namespace Exp.Order.Domain.Events
+namespace Exp.Ordering.Domain.Events
 {
     public class OrderCreatedDomainEvent : IDomainEvent
     {
