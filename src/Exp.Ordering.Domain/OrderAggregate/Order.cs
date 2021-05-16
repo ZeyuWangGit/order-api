@@ -1,4 +1,5 @@
 ﻿using Exp.Ordering.Domain.Abstraction;
+using Exp.Ordering.Domain.Events;
 
 namespace Exp.Ordering.Domain.OrderAggregate
 {
@@ -23,14 +24,13 @@ namespace Exp.Ordering.Domain.OrderAggregate
             this.Address = address;
             this.ItemCount = itemCount;
 
-            //this.AddDomainEvent(new OrderCreatedDomainEvent(this));
+            this.AddDomainEvent(new OrderCreatedDomainEvent(this));
         }
-
 
         public void ChangeAddress(Address address)
         {
             this.Address = address;
-            //this.AddDomainEvent(new OrderAddressChangedDomainEvent(this));
+            this.AddDomainEvent(new OrderAddressChangedDomainEvent(this));
         }
     }
 }
