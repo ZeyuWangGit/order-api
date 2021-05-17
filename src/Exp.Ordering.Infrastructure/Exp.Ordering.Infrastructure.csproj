@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Exp.Ordering.Domain.Abstraction\Exp.Ordering.Domain.Abstraction.csproj" />
+    <ProjectReference Include="..\Exp.Ordering.Domain\Exp.Ordering.Domain.csproj" />
   </ItemGroup>
 
 </Project>
