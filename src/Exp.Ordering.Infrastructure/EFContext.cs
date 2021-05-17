@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DotNetCore.CAP;
+using Exp.Ordering.Infrastructure.Extensions;
 using Exp.Ordering.Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,41 +15,90 @@ namespace Exp.Ordering.Infrastructure
 {
     public class EFContext: DbContext, IUnitOfWork, ITransaction
     {
-        protected IMediator _mediator;
-        ICapPublisher _capBus;
+        protected IMediator Mediator;
+        private readonly ICapPublisher _capBus;
 
         public EFContext(DbContextOptions options, IMediator mediator, ICapPublisher capBus) : base(options)
         {
-            _mediator = mediator;
+            Mediator = mediator;
             _capBus = capBus;
         }
 
         #region IUnitOfWork
-        public Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            await base.SaveChangesAsync(cancellationToken);
+            await Mediator.DispatchDomainEventsAsync(this);
+            return true;
         }
         #endregion
 
+        #region ITransaction
+
+        private IDbContextTransaction _currentTransaction;
+
         public IDbContextTransaction GetCurrentTransaction()
         {
-            throw new NotImplementedException();
+            return _currentTransaction;
         }
 
-        public bool HasActiveTransaction { get; }
+        public bool HasActiveTransaction => _currentTransaction != null;
+
         public Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            throw new NotImplementedException();
+            if(_currentTransaction != null) return null;
+            _currentTransaction = Database.BeginTransaction(_capBus, autoCommit: false);
+            return Task.FromResult(_currentTransaction);
         }
 
-        public Task CommitTransactionAsync(IDbContextTransaction transaction)
+        public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
-            throw new NotImplementedException();
+            if (transaction == null)
+            {
+                throw new ArgumentNullException(nameof(transaction));
+            }
+
+            if (transaction != _currentTransaction)
+            {
+                throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+            }
+
+            try
+            {
+                await SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch
+            {
+                RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
         }
 
         public void RollbackTransaction()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _currentTransaction?.Rollback();
+            }
+            finally
+            {
+                if (_currentTransaction != null)
+                {
+                    _currentTransaction.Dispose();
+                    _currentTransaction = null;
+                }
+            }
         }
+
+        #endregion
     }
 }
